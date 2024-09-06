@@ -28,7 +28,7 @@ option = st.selectbox(
     ("Diapers", "Shampoo", "Deodorants", "Water Bottles"),
 )
 
-if option = "Diapers"
+if option == "Diapers"
     # Exibindo a tabela de importâncias
     st.write('**Features importance:**')
     st.dataframe(feature_df)
