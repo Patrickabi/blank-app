@@ -29,10 +29,7 @@ option = st.selectbox(
 )
 
 if option == "Diapers":
-    # Exibindo a tabela de importâncias
-    st.write('**Features importance:**')
-    st.dataframe(feature_df)
-    
+
     st.title('Random Forest Feature Importance')
     # Train the model and get feature importance
     rf_model, X_train = train_rf_model()
