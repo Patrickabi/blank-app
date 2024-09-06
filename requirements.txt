@@ -1,1 +1,11 @@
 streamlit
+pandas
+plotly.graph_objects
+patrick5day_rfmodel_068
+sklearn.model_selection
+numpy
+sklearn.preprocessing
+sklearn.preprocessing
+sklearn.ensemble
+plotly.express
+plotly.graph_objects
