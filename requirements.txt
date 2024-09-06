@@ -1,10 +1,6 @@
 streamlit
 pandas
-sklearn.model_selection
-numpy
-sklearn.preprocessing
-sklearn.preprocessing
-sklearn.ensemble
+sklearn
 plotly
-plotly.express
-matplotlib.pyplot
+plotly
+matplotlib
