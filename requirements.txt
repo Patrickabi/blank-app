@@ -9,3 +9,4 @@ sklearn.preprocessing
 sklearn.ensemble
 plotly.express
 plotly.graph_objects
+matplotlib.pyplot
