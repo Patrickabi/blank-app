@@ -1,6 +1,5 @@
 streamlit
 pandas
-patrick5day_rfmodel_068
 sklearn.model_selection
 numpy
 sklearn.preprocessing
