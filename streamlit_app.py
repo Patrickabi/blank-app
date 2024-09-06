@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from patrick5day_rfmodel_068 import train_rf_model, plot_feature_importance
 import pandas as pd
