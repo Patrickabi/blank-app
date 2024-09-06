@@ -25,7 +25,7 @@ st.write (""" Please, choose one of our products """)
 
 option = st.selectbox(
     "",
-    ("Diapers", "Shampoo", "Deodorants", "Water Bottles),
+    ("Diapers", "Shampoo", "Deodorants", "Water Bottles"),
 )
 
 if option = "Diapers"
