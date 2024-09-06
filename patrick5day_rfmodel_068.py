@@ -214,7 +214,7 @@ def plot_feature_importance(rf_model, X_train):
 
     x_ = pd.Series(importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['importance'].reset_index(drop='first'))
     fig.add_trace(go.Bar(
-        x=importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['importance'].reset_index(drop='first')[2:],
+        x=importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['importance'].reset_index(drop='first')[1:],
         y=importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['feature'][1:],
         orientation='h',
         name='Other Features',
