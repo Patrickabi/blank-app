@@ -11,6 +11,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 import plotly.express as px
 import plotly.graph_objects as go
+import time
 
 
 
@@ -25,11 +26,22 @@ st.write (""" Please, choose one of our products """)
 option = None
 option = st.selectbox(
     "",
-    ("Diapers", "Shampoo", "Deodorants", "Water Bottles"),
+    ("Select one option", "Diapers", "Shampoo", "Deodorants", "Water Bottles"),
 )
 
 
 if option == "Diapers":
+
+
+progress_text = "Operation in progress. Please wait."
+my_bar = st.progress(0, text=progress_text)
+
+for percent_complete in range(100):
+    time.sleep(0.01)
+    my_bar.progress(percent_complete + 1, text=progress_text)
+time.sleep(1)
+my_bar.empty()
+
 
     st.title('Random Forest Feature Importance')
     # Train the model and get feature importance
