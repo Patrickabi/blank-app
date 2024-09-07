@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 import time
 from st_vizzu import *
 import visgraph
-from streamlit_visgraph import NodeConfig
+import NodeConfig
 
 st.set_page_config(layout="wide")
 
