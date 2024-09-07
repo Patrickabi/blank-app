@@ -59,7 +59,7 @@ elif option == "Shampoo":
         st.success("Done!")
 
 elif option == "Deodorants":
-        st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide")
     st.title("Streamlit VisGraph - Game of Thrones example")
 
     got_data = create_df()
