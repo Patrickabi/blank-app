@@ -28,6 +28,7 @@ option = st.selectbox(
     ("Diapers", "Shampoo", "Deodorants", "Water Bottles"),
 )
 
+option = None
 if option == "Diapers":
 
     st.title('Random Forest Feature Importance')
