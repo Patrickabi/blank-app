@@ -63,6 +63,7 @@ elif option == "Deodorants":
 
     df['Brand'] = df['Brand'].astype('object')
     df['Material Type'] = df['Material Type'].astype('object')
+    df['rating_cat'] = df['rating_cat'].astype('object')
     # Create ipyvizzu Object with the DataFrame
     obj = create_vizzu_obj(df)
     
