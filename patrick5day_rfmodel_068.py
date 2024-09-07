@@ -12,6 +12,68 @@ from sklearn.ensemble import RandomForestClassifier
 import plotly.express as px
 import plotly.graph_objects as go
 
+def create_df():
+    df = pd.read_csv('Base_Baby_18kv3.csv')
+    
+    #---------------------------------------------------
+    # Convert the 'volume' column to numeric, coercing errors to NaN
+    df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+    
+    # Filter rows where 'volume' is between 50 and 2000
+    df = df[(df['volume'] >= 50) & (df['volume'] <= 2000)]
+    
+    # Convert the 'Item_Weight_n' column to numeric, coercing errors to NaN
+    df['Item_Weight_n'] = pd.to_numeric(df['Item_Weight_n'], errors='coerce')
+    
+    # Filter rows where 'Item_Weight_n' is between 1 and 40
+    df = df[(df['Item_Weight_n'] >= 1) & (df['Item_Weight_n'] <= 40)]
+    # -------------------------------------------------
+    
+    
+    
+    # Define rating_cat as customer satisfaction (1 for yes, 0 for no)
+    def converter_categoria(valor):
+        if valor < 3:
+            return '0'
+        else:
+            return '1'
+    
+    # Aplicar a função à coluna alvo
+    df['rating_cat'] = df['rating'].apply(converter_categoria)
+    
+    
+    # Convert the 'volume' column to numeric, coercing errors to NaN
+    df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+    
+    # Filter rows where 'volume' is between 50 and 2000
+    df = df[(df['volume'] >= 50) & (df['volume'] <= 2000)]
+    
+    # Convert the 'Item_Weight_n' column to numeric, coercing errors to NaN
+    df['Item_Weight_n'] = pd.to_numeric(df['Item_Weight_n'], errors='coerce')
+    
+    # Filter rows where 'Item_Weight_n' is between 1 and 40
+    df = df[(df['Item_Weight_n'] >= 1) & (df['Item_Weight_n'] <= 40)]
+    
+    
+    encoder = OneHotEncoder(drop='first', sparse_output=False)
+    df_encoded = encoder.fit_transform(df[['Brand', 'Material Type']])
+    encoded_columns = encoder.get_feature_names_out(['Brand', 'Material Type'])
+    df_encoded = pd.DataFrame(df_encoded, columns=encoded_columns)
+    df = pd.concat([df.reset_index(drop=True), df_encoded.reset_index(drop=True)], axis=1)
+    
+    
+    X = df.drop(columns=['Brand', 'Material Type', 'Size', 'height', 'width', 'thickness', 'Unnamed: 0', 'rating', 'title_review', 'text', 'parent_asin',
+    'features', 'description', 'title_product', 'details', 'rating_cat'])
+    
+    y = df['rating_cat']
+    
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    
+    y_train = y_train.astype(int)
+    y_test = y_test.astype(int)
+    
+    return df
 df = pd.read_csv('Base_Baby_18kv3.csv')
     
 #---------------------------------------------------
