@@ -74,16 +74,16 @@ elif option == "Deodorants":
     # Preset plot usage. Preset plots work directly with DataFrames.
     bar_obj = bar_chart(df,
                         x="Material Type", 
-                        y="rating_cat",
+                        y="Material Type",
                         title="1.Using preset plot function `bar_chart()`")
 
     # Animate with defined arguments 
     anim_obj = beta_vizzu_animate(bar_obj,
-                                  x="Brand",
-                                  y="rating_cat",
+                                  x="Material Type",
+                                  y="Material Type",
                                   title="Animate with beta_vizzu_animate () function",
-                                  label="Brand",
-                                  color="Brand",  # Ensure 'Size' exists
+                                  label="Material Type",
+                                  color="Material Type",  # Ensure 'Size' exists
                                   legend="color",
                                   sort="byValue",
                                   reverse=True,
@@ -92,7 +92,7 @@ elif option == "Deodorants":
 
     # Animate with general dict-based arguments 
     _dict = {
-        "size": {"set": "Brand"}, 
+        "size": {"set": "Material Type"}, 
         "geometry": "circle",
         "coordSystem": "polar",
         "title": "Animate with vizzu_animate () function",
