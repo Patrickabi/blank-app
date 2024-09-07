@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-from patrick5day_rfmodel_068 import train_rf_model, plot_feature_importance
+from patrick5day_rfmodel_068 import train_rf_model, plot_feature_importance, create_df
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -59,7 +59,7 @@ elif option == "Shampoo":
         st.success("Done!")
 
 elif option == "Deodorants":
-    df = pd.read_csv("Base_Baby_18kv3.csv")
+    df = create_df()
     # Create ipyvizzu Object with the DataFrame
     obj = create_vizzu_obj(df)
     
