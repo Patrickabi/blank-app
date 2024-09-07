@@ -13,7 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import time
 from st_vizzu import *
-
+from streamlit_visgraph import visgraph
 
 
 
@@ -59,46 +59,29 @@ elif option == "Shampoo":
         st.success("Done!")
 
 elif option == "Deodorants":
-    df = create_df()
+        st.set_page_config(layout="wide")
+    st.title("Streamlit VisGraph - Game of Thrones example")
 
-    df = df.fillna('Unknown')  # Or another appropriate value
-    
-    # Explicitly convert relevant columns to objects
-    df['Brand'] = df['Brand'].astype('object')
-    df['Material Type'] = df['Material Type'].astype('object')
-    df['rating_cat'] = df['rating_cat'].astype(int)
+    got_data = create_df()
 
-    # Create ipyvizzu Object with the DataFrame
-    obj = create_vizzu_obj(df)
+    sources = got_data['Brand']
+    targets = got_data['Material Type']
+    weights = got_data['rating_cat']
+    nodes = []
+    edges = []
+    node_config = NodeConfig(shape='dot')
+    edge_config = EdgeConfig()
+    options = Config()
+    edge_data = zip(sources, targets, weights)
+    nodes_all = sources.tolist() + targets.tolist()
+    node_data = list(set(nodes_all))
+    for i in range(0, len(node_data)):
+      nodes.append(Node(id=i, label=node_data[i], title=node_data[i], value=nodes_all.count(node_data[i]), url="http://example/"+node_data[i], node_config=node_config))   
 
-    # Preset plot usage. Preset plots work directly with DataFrames.
-    bar_obj = bar_chart(df,
-                        x="Material Type", 
-                        y="Material Type",
-                        title="1.Using preset plot function `bar_chart()`")
-
-    # Animate with defined arguments 
-    anim_obj = beta_vizzu_animate(bar_obj,
-                                  x="Material Type",
-                                  y="Material Type",
-                                  title="Animate with beta_vizzu_animate () function",
-                                  label="Material Type",
-                                  color="Material Type",  # Ensure 'Size' exists
-                                  legend="color",
-                                  sort="byValue",
-                                  reverse=True,
-                                  align="center",
-                                  split=False)
-
-    # Animate with general dict-based arguments 
-    _dict = {
-        "size": {"set": "Material Type"}, 
-        "geometry": "circle",
-        "coordSystem": "polar",
-        "title": "Animate with vizzu_animate () function",
-    }
-    anim_obj2 = vizzu_animate(anim_obj, _dict)
-
-    # Visualize within Streamlit
-    if st.button("Animate"):
-        vizzu_plot(anim_obj2)
+    for e in edge_data:
+        src = e[0]
+        dst = e[1]
+        w = e[2]
+        edges.append(Edge(source=node_data.index(src), target=node_data.index(dst), edge_config=edge_config))
+ 
+    v = visgraph(nodes=nodes, edges=edges, config=options)
