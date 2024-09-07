@@ -5,4 +5,4 @@ plotly
 plotly
 matplotlib
 st_vizzu
-streamlit_visgraph
+visgraph
