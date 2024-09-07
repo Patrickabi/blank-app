@@ -83,7 +83,7 @@ elif option == "Deodorants":
                                   y="rating_cat",
                                   title="Animate with beta_vizzu_animate () function",
                                   label="Brand",
-                                  color="Size",  # Ensure 'Size' exists
+                                  color="Brand",  # Ensure 'Size' exists
                                   legend="color",
                                   sort="byValue",
                                   reverse=True,
