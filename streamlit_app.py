@@ -16,6 +16,7 @@ from st_vizzu import *
 import visgraph
 
 
+st.set_page_config(layout="wide")
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
@@ -59,7 +60,7 @@ elif option == "Shampoo":
         st.success("Done!")
 
 elif option == "Deodorants":
-    st.set_page_config(layout="wide")
+
     st.title("Streamlit VisGraph - Game of Thrones example")
 
     got_data = create_df()
