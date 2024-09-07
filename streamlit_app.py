@@ -53,8 +53,7 @@ if option == "Diapers":
     # Display the Plotly figure in Streamlit
     st.plotly_chart(fig)
 elif option == "Shampoo":
-
     with st.spinner('Wait for it...'):
-    time.sleep(5)
-    st.success("Done!")
+        time.sleep(5)
+        st.success("Done!")
     
