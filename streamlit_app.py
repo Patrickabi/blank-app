@@ -13,7 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import time
 from st_vizzu import *
-import visgraph
+import streamlit_visgraph
 
 
 
