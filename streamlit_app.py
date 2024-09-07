@@ -64,40 +64,38 @@ elif option == "Deodorants":
     df['Brand'] = df['Brand'].astype('object')
     df['Material Type'] = df['Material Type'].astype('object')
     df['rating_cat'] = df['rating_cat'].astype('object')
+
     # Create ipyvizzu Object with the DataFrame
     obj = create_vizzu_obj(df)
-    
-    # Preset plot usage. Preset plots works directly with DataFrames.
+
+    # Preset plot usage. Preset plots work directly with DataFrames.
     bar_obj = bar_chart(df,
-                x = "Material Type", 
-                y = "rating_cat",
-                title= "1.Using preset plot function `bar_chart()`"
-                )
-    
+                        x="Material Type", 
+                        y="rating_cat",
+                        title="1.Using preset plot function `bar_chart()`")
+
     # Animate with defined arguments 
-    anim_obj = beta_vizzu_animate( bar_obj,
-        x = "Brand",
-        y =  "rating_cat",
-        title = "Animate with beta_vizzu_animate () function",
-        label= "Brand",
-        color="Size",
-        legend="color",
-        sort="byValue",
-        reverse=True,
-        align="center",
-        split=False,
-    )
-    
-    # Animate with general dict based arguments 
-    _dict = {"size": {"set": "Brand"}, 
+    anim_obj = beta_vizzu_animate(bar_obj,
+                                  x="Brand",
+                                  y="rating_cat",
+                                  title="Animate with beta_vizzu_animate () function",
+                                  label="Brand",
+                                  color="Size",  # Ensure 'Size' exists
+                                  legend="color",
+                                  sort="byValue",
+                                  reverse=True,
+                                  align="center",
+                                  split=False)
+
+    # Animate with general dict-based arguments 
+    _dict = {
+        "size": {"set": "Brand"}, 
         "geometry": "circle",
         "coordSystem": "polar",
         "title": "Animate with vizzu_animate () function",
-        }
-    anim_obj2 = vizzu_animate(anim_obj,_dict)
-    
+    }
+    anim_obj2 = vizzu_animate(anim_obj, _dict)
+
     # Visualize within Streamlit
-    with st.container(): # Maintaining the aspect ratio
-        st.button("Animate")
+    if st.button("Animate"):
         vizzu_plot(anim_obj2)
-        
