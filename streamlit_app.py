@@ -61,9 +61,12 @@ elif option == "Shampoo":
 elif option == "Deodorants":
     df = create_df()
 
+    df = df.fillna('Unknown')  # Or another appropriate value
+    
+    # Explicitly convert relevant columns to objects
     df['Brand'] = df['Brand'].astype('object')
     df['Material Type'] = df['Material Type'].astype('object')
-    df['rating_cat'] = df['rating_cat'].astype('object')
+    df['rating_cat'] = df['rating_cat'].astype(int)
 
     # Create ipyvizzu Object with the DataFrame
     obj = create_vizzu_obj(df)
