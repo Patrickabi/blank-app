@@ -22,13 +22,13 @@ st.write("""
 """)
 
 st.write (""" Please, choose one of our products """)
-
+option = None
 option = st.selectbox(
     "",
     ("Diapers", "Shampoo", "Deodorants", "Water Bottles"),
 )
 
-option = None
+
 if option == "Diapers":
 
     st.title('Random Forest Feature Importance')
