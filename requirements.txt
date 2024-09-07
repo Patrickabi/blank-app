@@ -6,3 +6,5 @@ plotly
 matplotlib
 st_vizzu
 visgraph
+NodeConfig
+streamlit_visgraph
