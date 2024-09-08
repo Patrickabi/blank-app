@@ -14,9 +14,8 @@ import plotly.graph_objects as go
 import time
 from st_vizzu import *
 import visgraph
-import NodeConfig
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title="Customer Decision Tree - Amazon")
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
@@ -60,29 +59,4 @@ elif option == "Shampoo":
         st.success("Done!")
 
 elif option == "Deodorants":
-
-    st.title("Streamlit VisGraph - Game of Thrones example")
-
-    got_data = create_df()
-
-    sources = got_data['Brand']
-    targets = got_data['Material Type']
-    weights = got_data['rating_cat']
-    nodes = []
-    edges = []
-    node_config = NodeConfig(shape='dot')
-    edge_config = EdgeConfig()
-    options = Config()
-    edge_data = zip(sources, targets, weights)
-    nodes_all = sources.tolist() + targets.tolist()
-    node_data = list(set(nodes_all))
-    for i in range(0, len(node_data)):
-      nodes.append(Node(id=i, label=node_data[i], title=node_data[i], value=nodes_all.count(node_data[i]), url="http://example/"+node_data[i], node_config=node_config))   
-
-    for e in edge_data:
-        src = e[0]
-        dst = e[1]
-        w = e[2]
-        edges.append(Edge(source=node_data.index(src), target=node_data.index(dst), edge_config=edge_config))
- 
-    v = visgraph(nodes=nodes, edges=edges, config=options)
+    None
