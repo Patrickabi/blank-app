@@ -37,7 +37,7 @@ if option == "Diapers":
     my_bar = st.progress(0, text=progress_text)
     
     for percent_complete in range(100):
-        time.sleep(0.005)
+        time.sleep(0.0005)
         my_bar.progress(percent_complete + 1, text=progress_text)
     time.sleep(1)
     my_bar.empty()
