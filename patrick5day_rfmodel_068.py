@@ -109,9 +109,8 @@ def train_rf_model():
 
 def plot_feature_importance(rf_model, X_train):
     
-    
     importances = rf_model.feature_importances_
-    
+        
     # Create a DataFrame for the feature importances and their corresponding feature names
     importance_df = pd.DataFrame({
         'feature': X_train.columns,
@@ -173,7 +172,7 @@ def plot_feature_importance(rf_model, X_train):
         y=['Brand (summed)'],
         orientation='h',
         name='Other',
-        marker_color='rgba(128, 128, 128, 0.6)',  # Gray color for 'Other'
+        marker_color='rgba(0, 0, 0, 0.8)',  # Gray color for 'Other'
         text='Other Brands',
         textposition='inside'
     ))
@@ -192,13 +191,14 @@ def plot_feature_importance(rf_model, X_train):
     
     # Add the summed "Material (summed)" bar
     fig.add_trace(go.Bar(
-        x=[material_importance_sum],
+        x=[0.0296551],
         y=['Material (summed)'],
         orientation='h',
         name='Material',
-        marker_color='rgba(128, 128, 128, 0.6)',  # Primary color for Material summed
+        marker_color='rgba(0, 0, 0, 0.8)',  # Primary color for Material summed
         text='Other Materials',
-        textposition='inside'
+        textposition='inside',
+        insidetextanchor='middle'
     ))
     
     # Plot the remaining features
@@ -207,7 +207,7 @@ def plot_feature_importance(rf_model, X_train):
         y=importance_df[~importance_df['feature'].str.contains('Brand|Material')]['feature'],
         orientation='h',
         name='Other Features',
-        marker_color='rgba(250, 150, 200, 0.6)'  # Gray color for other features
+        marker_color='rgb(255, 204, 204, 0.1)'  # Gray color for other features
     ))
     
     # Update layout for better display
@@ -217,9 +217,8 @@ def plot_feature_importance(rf_model, X_train):
         yaxis_title="Feature",
         barmode='stack',  # Stack bars on top of each other
         yaxis={'categoryorder': 'total ascending'}
-    )
-    
-    fig.show()
+    )   
+
     return fig
 
 
