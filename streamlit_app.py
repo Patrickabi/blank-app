@@ -114,4 +114,5 @@ elif option == "Shampoo":
         st.plotly_chart(fig)
 
 elif option == "Deodorants":
-    None
+    time.sleep(0.005)
+    st.success("Done!")
