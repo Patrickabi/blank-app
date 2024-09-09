@@ -62,7 +62,7 @@ def create_df():
     df = pd.concat([df.reset_index(drop=True), df_encoded.reset_index(drop=True)], axis=1)
     
     
-    X = df.drop(columns=['Brand', 'Material Type', 'Size', 'height', 'width', 'thickness', 'Unnamed: 0', 'rating', 'title_review', 'text', 'parent_asin',
+    X = df.drop(columns=['Brand', 'Material Type', 'Size', 'height', 'width', 'thickness', 'Unnamed: 0', 'Unnamed: 0.1', 'rating', 'title_review', 'text', 'parent_asin',
     'features', 'description', 'title_product', 'details', 'rating_cat'])
     
     y = df['rating_cat']
@@ -207,7 +207,7 @@ def plot_feature_importance(rf_model, X_train):
         y=importance_df[~importance_df['feature'].str.contains('Brand|Material')]['feature'],
         orientation='h',
         name='Other Features',
-        marker_color='rgba(0, 0, 0, 0.6)'  # Gray color for other features
+        marker_color='rgba(250, 150, 200, 0.6)'  # Gray color for other features
     ))
     
     # Update layout for better display
