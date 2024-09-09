@@ -107,9 +107,7 @@ def plot_shampoo_feature_importance(rf_model, X_train):
             y=[row['feature']],
             orientation='h',
             name=row['feature'],
-            marker_color=colors[i % len(colors)],  # Assign different colors
-            text=row['feature'],
-            textposition='inside'
+            marker_color=colors[i % len(colors)]  # Assign different colors
         ))
     
     # Add the "item_size" bar
@@ -119,9 +117,6 @@ def plot_shampoo_feature_importance(rf_model, X_train):
         orientation='h',
         name='item_size',
         marker_color='rgba(255, 105, 180, 0.6)',  # Pink shade for item_size
-        text='item_size',
-        textposition='inside',
-        insidetextanchor='middle'
     ))
     
     # Update layout for better display
