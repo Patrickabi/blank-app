@@ -84,17 +84,29 @@ elif option == "Shampoo":
         st.success("Done!")
 
     st.header("The study", divider=True)
-    st.write ("""In our review of the key factors influencing diaper purchase decisions, we conducted an in-depth analysis of customer preferences.
-    By examining various features, such as brand, dimensions, material quality, and others, we identified which one of them plays the biggest rows in the final decision.
-    Our findings revealed that :red[Brand], :blue[Volume], :violet[Material] and :green[Weight] stand out as the most influential factors.
-    These elements play a pivotal role in shaping customer decisions, highlighting the significance of brand loyalty, product capacity, and material composition in the diaper selection process.""")
+    st.write ("""This chart illustrates the feature importances from our Random Forest model, where each bar represents the relative contribution of different product
+    attributes to the consumer's purchasing decision. As observed, the :red[brand] of the product significantly influences consumer choice, accounting for over :rainbow[97% of the decision-making] process.
+    This highlights the dominant role that brand reputation and recognition play in shaping consumer preferences in the shampoo market.""")
     
     X, y = get_shampoo_data()
     model, X_train = shampoo_model(X, y)
     fig = plot_shampoo_feature_importance(model, X_train)
-    
+
+
+    shampoo_text = """Other features, such as ingredient composition and item size, play a much smaller role. However,
+    they still contribute to the overall decision, as consumers may also consider the product’s size and specific ingredients 
+    when making their choice. Despite this, it is clear from our study that brand loyalty and recognition are the primary factors driving purchasing behavior, overshadowing other product attributes."""
     on = st.toggle("Show Graph")
 
+    def stream_data_sh():
+        for word in shampoo_text.split(" "):
+            yield word + " "
+            time.sleep(0.02)
+
+
+    if st.button("but why ?"):
+        st.write_stream(stream_data_sh)
+    
     if on:
         st.plotly_chart(fig)
 
