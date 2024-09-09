@@ -65,7 +65,7 @@ def shampoo_model(X_encoded, y):
       'Importance': importances
   }).sort_values(by='Importance', ascending=False)
 
-  return best_model, importance_df
+  return best_model, X_train
 
 
 def plot_shampoo_feature_importance(rf_model, X_train):
