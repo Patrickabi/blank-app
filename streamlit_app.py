@@ -31,6 +31,7 @@ option = st.selectbox(
 
 if option == "Diapers":
 
+
     rf_model, X_train = train_rf_model()
     progress_text = "Operation in progress. Please wait."
     my_bar = st.progress(0, text=progress_text)
@@ -41,15 +42,18 @@ if option == "Diapers":
     time.sleep(1)
     my_bar.empty()
     
-    
+    st.header("The study", divider=True)
     st.write ("""In our review of the key factors influencing diaper purchase decisions, we conducted an in-depth analysis of customer preferences.
-    By examining various features, such as brand, product volume, material quality, and others, we identified the major driving forces behind consumer choices.
-    Our findings revealed that Brand, Volume, and Material stand out as the most influential factors.
+    By examining various features, such as brand, dimensions, material quality, and others, we identified the major driving forces behind consumer choices.
+
+    
+    Our findings revealed that :red[Brand], :blue[Volume], and :yellow[Material] and :green[Wieght] stand out as the most influential factors.
+    
     These elements play a pivotal role in shaping customer decisions, highlighting the significance of brand loyalty, product capacity, and material composition in the diaper selection process.""")
 
     
 
-    st.title('Random Forest Feature Importance')
+    st.title('Visualizing')
 
     # Plot the feature importance 
     fig = plot_feature_importance(rf_model, X_train)
