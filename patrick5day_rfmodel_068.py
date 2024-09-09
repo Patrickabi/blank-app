@@ -110,9 +110,8 @@ def train_rf_model():
 def plot_feature_importance(rf_model, X_train):
     
     
-
     importances = rf_model.feature_importances_
-
+    
     # Create a DataFrame for the feature importances and their corresponding feature names
     importance_df = pd.DataFrame({
         'feature': X_train.columns,
@@ -125,8 +124,14 @@ def plot_feature_importance(rf_model, X_train):
     # Find the top 3 brands by importance
     top_3_brands = brand_features.nlargest(3, 'importance')
     
-    # Sum the importance of all brand features
-    brand_importance_sum = brand_features['importance'].sum()
+    # Sum the importance of the remaining 'Brand' features
+    other_brands_importance = brand_features[~brand_features['feature'].isin(top_3_brands['feature'])]['importance'].sum()
+    
+    # Create the 'Brand (summed)' row with only the remaining 'Other' brand importance
+    brand_row = pd.DataFrame({'feature': ['Brand (summed)'], 'importance': [other_brands_importance]})
+    
+    # Create a DataFrame for the top 3 brands and their importance
+    top_3_brands = pd.concat([top_3_brands, brand_row])
     
     # Filter for 'Material' columns and sum importance for material features
     material_features = importance_df[importance_df['feature'].str.contains('Material')]
@@ -134,16 +139,14 @@ def plot_feature_importance(rf_model, X_train):
     
     top_3_material = material_features.nlargest(3, 'importance')
     
-    # Remove the one-hot encoded 'Brand' and 'Material' features from the DataFrame, but keep Volume and Item_Weight_n
-    importance_df = importance_df[~importance_df['feature'].str.contains('Brand|Material') | 
-                                  importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]
+    # Remove the one-hot encoded 'Brand' and 'Material' features from the DataFrame
+    importance_df = importance_df[~importance_df['feature'].str.contains('Brand|Material')]
     
-    # Create new DataFrame rows for the summed 'Brand' and 'Material' importances
-    brand_row = pd.DataFrame({'feature': ['Brand (summed)'], 'importance': [brand_importance_sum]})
+    # Create new DataFrame rows for the summed 'Material' importance
     material_row = pd.DataFrame({'feature': ['Material (summed)'], 'importance': [material_importance_sum]})
     
     # Concatenate the new rows with the existing DataFrame
-    importance_df = pd.concat([importance_df, brand_row, material_row], ignore_index=True)
+    importance_df = pd.concat([importance_df, top_3_brands, material_row], ignore_index=True)
     
     # Sort the features by importance
     importance_df = importance_df.sort_values(by='importance', ascending=False)
@@ -155,7 +158,7 @@ def plot_feature_importance(rf_model, X_train):
     fig = go.Figure()
     
     # Add bars for the top 3 brands
-    for i, (index, row) in enumerate(top_3_brands.iterrows()):
+    for i, (index, row) in enumerate(top_3_brands[top_3_brands['feature'] != 'Brand (summed)'].iterrows()):
         fig.add_trace(go.Bar(
             x=[row['importance']],
             y=['Brand (summed)'],
@@ -164,49 +167,47 @@ def plot_feature_importance(rf_model, X_train):
             marker_color=top_3_colors[i % len(top_3_colors)]  # Use modulo to avoid index out of range
         ))
     
-    # Define colors for the top 3 materials
-    top_3_colors_material = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']
+    # Add bar for 'Other' brands
+    fig.add_trace(go.Bar(
+        x=[other_brands_importance],
+        y=['Brand (summed)'],
+        orientation='h',
+        name='Other',
+        marker_color='rgba(128, 128, 128, 0.6)',  # Gray color for 'Other'
+        text='Other Brands',
+        textposition='inside'
+    ))
     
     # Add bars for the top 3 materials
+    top_3_colors_material = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']
     for i, (index, row) in enumerate(top_3_material.iterrows()):
         fig.add_trace(go.Bar(
             x=[row['importance']],
             y=['Material (summed)'],
             orientation='h',
             name=row['feature'],
-            marker_color=top_3_colors_material[i % len(top_3_colors_material)]
+            textposition='inside',
+            marker_color=top_3_colors_material[i % len(top_3_colors_material)]  # Use modulo to avoid index out of range
         ))
-    
-    # Add the summed "Brand (summed)" bar
-    fig.add_trace(go.Bar(
-        x=[0.0],
-        y=['Brand (summed)'],
-        orientation='h',
-        name='Other',
-        marker_color='rgba(0, 0, 0, 0.6)',  # Primary color
-        text='Other Brand',
-        textposition='inside'
-    ))
     
     # Add the summed "Material (summed)" bar
     fig.add_trace(go.Bar(
-        x=[0.1389],
+        x=[material_importance_sum],
         y=['Material (summed)'],
         orientation='h',
-        name='Other',
-        marker_color='rgba(0, 0, 0, 0.6)',  # Primary color
-        text='Other Material',
-        textposition='inside',
-        insidetextanchor='middle'
+        name='Material',
+        marker_color='rgba(128, 128, 128, 0.6)',  # Primary color for Material summed
+        text='Other Materials',
+        textposition='inside'
     ))
     
-    # Keep bars for "Volume" and "Item_Weight_n"
+    # Plot the remaining features
     fig.add_trace(go.Bar(
-        x=importance_df[importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]['importance'],
-        y=importance_df[importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]['feature'],
+        x=importance_df[~importance_df['feature'].str.contains('Brand|Material')]['importance'],
+        y=importance_df[~importance_df['feature'].str.contains('Brand|Material')]['feature'],
         orientation='h',
-        name='Volume and Item_Weight_n',
-        marker_color='rgba(100, 100, 255, 0.6)'  # Choose a color for Volume and Item_Weight_n
+        name='Other Features',
+        marker_color='rgba(0, 0, 0, 0.6)'  # Gray color for other features
     ))
     
     # Update layout for better display
@@ -218,7 +219,7 @@ def plot_feature_importance(rf_model, X_train):
         yaxis={'categoryorder': 'total ascending'}
     )
     
-    # Show the figure
+    fig.show()
     return fig
 
 
