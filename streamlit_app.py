@@ -87,7 +87,10 @@ elif option == "Shampoo":
     st.write ("""This chart illustrates the feature importances from our Random Forest model, where each bar represents the relative contribution of different product
     attributes to the consumer's purchasing decision. As observed, the :red[brand] of the product significantly influences consumer choice, accounting for over :rainbow[97% of the decision-making] process.
     This highlights the dominant role that brand reputation and recognition play in shaping consumer preferences in the shampoo market.""")
+
+    st.image("shampoo.png", caption="Customer decision tree")
     
+    on = st.toggle("Show Graph")
     X, y = get_shampoo_data()
     model, X_train = shampoo_model(X, y)
     fig = plot_shampoo_feature_importance(model, X_train)
@@ -96,7 +99,7 @@ elif option == "Shampoo":
     shampoo_text = """Other features, such as ingredient composition and item size, play a much smaller role. However,
     they still contribute to the overall decision, as consumers may also consider the product’s size and specific ingredients 
     when making their choice. Despite this, it is clear from our study that brand loyalty and recognition are the primary factors driving purchasing behavior, overshadowing other product attributes."""
-    on = st.toggle("Show Graph")
+    
 
     def stream_data_sh():
         for word in shampoo_text.split(" "):
