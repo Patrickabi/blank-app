@@ -76,7 +76,7 @@ def create_df():
 
 df = create_df()
 
-X = df.drop(columns=['Brand', 'Material Type', 'Size', 'height', 'width', 'thickness', 'Unnamed: 0', 'rating', 'title_review', 'text', 'parent_asin',
+X = df.drop(columns=['Brand', 'Material Type', 'Size', 'height', 'width', 'thickness', 'Unnamed: 0','Unnamed: 0.1', 'rating', 'title_review', 'text', 'parent_asin',
 'features', 'description', 'title_product', 'details', 'rating_cat'])
 
 y = df['rating_cat']
