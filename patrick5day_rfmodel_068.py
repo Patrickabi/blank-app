@@ -118,41 +118,42 @@ def plot_feature_importance(rf_model, X_train):
         'feature': X_train.columns,
         'importance': importances
     })
-
+    
     # Filter for 'Brand' columns
     brand_features = importance_df[importance_df['feature'].str.contains('Brand')]
-
+    
     # Find the top 3 brands by importance
     top_3_brands = brand_features.nlargest(3, 'importance')
-
+    
     # Sum the importance of all brand features
     brand_importance_sum = brand_features['importance'].sum()
-
+    
     # Filter for 'Material' columns and sum importance for material features
     material_features = importance_df[importance_df['feature'].str.contains('Material')]
     material_importance_sum = material_features['importance'].sum()
-
+    
     top_3_material = material_features.nlargest(3, 'importance')
-
-    # Remove the one-hot encoded 'Brand' and 'Material' features from the DataFrame
-    importance_df = importance_df[~importance_df['feature'].str.contains('Brand|Material')]
-
+    
+    # Remove the one-hot encoded 'Brand' and 'Material' features from the DataFrame, but keep Volume and Item_Weight_n
+    importance_df = importance_df[~importance_df['feature'].str.contains('Brand|Material') | 
+                                  importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]
+    
     # Create new DataFrame rows for the summed 'Brand' and 'Material' importances
     brand_row = pd.DataFrame({'feature': ['Brand (summed)'], 'importance': [brand_importance_sum]})
     material_row = pd.DataFrame({'feature': ['Material (summed)'], 'importance': [material_importance_sum]})
-
+    
     # Concatenate the new rows with the existing DataFrame
     importance_df = pd.concat([importance_df, brand_row, material_row], ignore_index=True)
-
+    
     # Sort the features by importance
     importance_df = importance_df.sort_values(by='importance', ascending=False)
-
+    
     # Define colors for the top 3 brands
     top_3_colors = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)']
-
+    
     # Plotly stacked bar chart
     fig = go.Figure()
-
+    
     # Add bars for the top 3 brands
     for i, (index, row) in enumerate(top_3_brands.iterrows()):
         fig.add_trace(go.Bar(
@@ -162,7 +163,10 @@ def plot_feature_importance(rf_model, X_train):
             name=row['feature'],
             marker_color=top_3_colors[i % len(top_3_colors)]  # Use modulo to avoid index out of range
         ))
-    top_3_colors_material = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']    
+    
+    # Define colors for the top 3 materials
+    top_3_colors_material = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']
+    
     # Add bars for the top 3 materials
     for i, (index, row) in enumerate(top_3_material.iterrows()):
         fig.add_trace(go.Bar(
@@ -170,12 +174,12 @@ def plot_feature_importance(rf_model, X_train):
             y=['Material (summed)'],
             orientation='h',
             name=row['feature'],
-            marker_color=top_3_colors_material[i % len(top_3_colors)]  # Use modulo to avoid index out of range
+            marker_color=top_3_colors_material[i % len(top_3_colors_material)]
         ))
-
+    
     # Add the summed "Brand (summed)" bar
     fig.add_trace(go.Bar(
-        x=[0.068],
+        x=[0.0],
         y=['Brand (summed)'],
         orientation='h',
         name='Other',
@@ -183,8 +187,8 @@ def plot_feature_importance(rf_model, X_train):
         text='Other Brand',
         textposition='inside'
     ))
-
-    # Add the summed " (summed)" bar
+    
+    # Add the summed "Material (summed)" bar
     fig.add_trace(go.Bar(
         x=[0.1389],
         y=['Material (summed)'],
@@ -195,16 +199,16 @@ def plot_feature_importance(rf_model, X_train):
         textposition='inside',
         insidetextanchor='middle'
     ))
-
-    x_ = pd.Series(importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['importance'].reset_index(drop='first'))
+    
+    # Keep bars for "Volume" and "Item_Weight_n"
     fig.add_trace(go.Bar(
-        x=importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['importance'].reset_index(drop='first')[1:],
-        y=importance_df[~importance_df['feature'].str.contains('Brand (summed)')]['feature'][1:],
+        x=importance_df[importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]['importance'],
+        y=importance_df[importance_df['feature'].isin(['Volume', 'Item_Weight_n'])]['feature'],
         orientation='h',
-        name='Other Features',
-        marker_color='rgba(200, 200, 200, 0.6)'  # Color for other features
+        name='Volume and Item_Weight_n',
+        marker_color='rgba(100, 100, 255, 0.6)'  # Choose a color for Volume and Item_Weight_n
     ))
-
+    
     # Update layout for better display
     fig.update_layout(
         title="Feature Importances in Random Forest (Including Summed Categories)",
@@ -213,8 +217,9 @@ def plot_feature_importance(rf_model, X_train):
         barmode='stack',  # Stack bars on top of each other
         yaxis={'categoryorder': 'total ascending'}
     )
+    
+    # Show the figure
     return fig
-
 
 
 
