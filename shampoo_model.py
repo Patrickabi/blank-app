@@ -109,8 +109,11 @@ def plot_shampoo_feature_importance(rf_model, X_train):
     # Concatenate the new rows with the existing DataFrame
     importance_df = pd.concat([importance_df, top_3_brands, ingredient_row], ignore_index=True)
     
+    # Filter out features with importance less than 0.03
+    importance_df = importance_df[importance_df['importance'] > 0.03]
+    
     # Sort the features by importance
-    importance_df = sorted_df = importance_df.sort_values(by='importance', ascending=False)
+    importance_df = importance_df.sort_values(by='importance', ascending=False)
     
     # Define colors for the top 3 brands
     top_3_colors = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)']
@@ -174,7 +177,7 @@ def plot_shampoo_feature_importance(rf_model, X_train):
     
     # Update layout for better display
     fig.update_layout(
-        title="Feature Importances in Random Forest (Including Summed Categories)",
+        title="Feature Importances in Random Forest (Filtered for Importance > 0.03)",
         xaxis_title="Importance",
         yaxis_title="Feature",
         barmode='stack',  # Stack bars on top of each other
