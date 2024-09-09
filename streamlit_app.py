@@ -78,9 +78,17 @@ if option == "Diapers":
         st.plotly_chart(fig)
 
 elif option == "Shampoo":
+    
     with st.spinner('Wait for it...'):
         time.sleep(5)
         st.success("Done!")
+
+    st.header("The study", divider=True)
+    st.write ("""In our review of the key factors influencing diaper purchase decisions, we conducted an in-depth analysis of customer preferences.
+    By examining various features, such as brand, dimensions, material quality, and others, we identified which one of them plays the biggest rows in the final decision.
+    Our findings revealed that :red[Brand], :blue[Volume], :violet[Material] and :green[Weight] stand out as the most influential factors.
+    These elements play a pivotal role in shaping customer decisions, highlighting the significance of brand loyalty, product capacity, and material composition in the diaper selection process.""")
+    
     X, y = get_shampoo_data()
     model, X_train = shampoo_model(X, y)
     fig = plot_shampoo_feature_importance(model, X_train)
