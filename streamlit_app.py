@@ -83,7 +83,11 @@ elif option == "Shampoo":
     X, y = get_shampoo_data()
     model, X_train = shampoo_model(X, y)
     fig = plot_shampoo_feature_importance(model, X_train)
-    fig.show()
+    
+    on = st.toggle("Show Graph")
+
+    if on:
+        st.plotly_chart(fig)
 
 elif option == "Deodorants":
     None
