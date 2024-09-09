@@ -81,7 +81,9 @@ elif option == "Shampoo":
         time.sleep(5)
         st.success("Done!")
     X, y = get_shampoo_data()
-    model, importance = shampoo_model(X, y)
+    model, X_train = shampoo_model(X, y)
+    fig = plot_shampoo_feature_importance(model, X_train)
+    fig.show()
 
 elif option == "Deodorants":
     None
