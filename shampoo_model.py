@@ -7,6 +7,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import RandomizedSearchCV
 from scipy.stats import randint
+import plotly.graph_objects as go
 
 def get_shampoo_data():
     df = pd.read_csv('shampoo_final.csv')
