@@ -80,7 +80,7 @@ if option == "Diapers":
 elif option == "Shampoo":
     
     with st.spinner('Wait for it...'):
-        time.sleep(5)
+        time.sleep(0.005)
         st.success("Done!")
 
     st.header("The study", divider=True)
