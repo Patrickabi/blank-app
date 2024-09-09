@@ -129,5 +129,15 @@ def get_deodo_data():
   y = df_final['rating_cat']
   
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+  best_params = {'max_depth': 10, 'min_samples_leaf': 10, 'min_samples_split': 4}
+
   
-  return df_final, X_train
+  return df_final, X_train, y_train
+
+def deodo_model(X_train, y_train)
+    
+  best_params = {'max_depth': 10, 'min_samples_leaf': 10, 'min_samples_split': 4}
+  clf = DecisionTreeClassifier(**best_params, random_state=42)
+  # Treinando o modelo com os melhores parâmetros
+  clf.fit(X_train, y_train)
+  return clf
