@@ -80,6 +80,8 @@ elif option == "Shampoo":
     with st.spinner('Wait for it...'):
         time.sleep(5)
         st.success("Done!")
+    X, y = get_shampoo_data()
+    model, importance = shampoo_model(X, y)
 
 elif option == "Deodorants":
     None
