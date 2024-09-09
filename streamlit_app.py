@@ -48,7 +48,7 @@ if option == "Diapers":
     Our findings revealed that :red[Brand], :blue[Volume], :violet[Material] and :green[Weight] stand out as the most influential factors.
     These elements play a pivotal role in shaping customer decisions, highlighting the significance of brand loyalty, product capacity, and material composition in the diaper selection process.""")
 
-    st.image("cortado.png", caption="Customer decision tree")
+    st.image("cortado.png", caption="Customer decision tree", use_column_width=True)
 
     _diaper_text = """
     As we can see, the first choice the customer should make is regarding the type of diaper. Disposable diapers surely are more practical, but cloth diapers can be easy on the budget.
