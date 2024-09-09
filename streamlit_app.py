@@ -14,6 +14,7 @@ import plotly.graph_objects as go
 import time
 from st_vizzu import *
 import visgraph
+from shampoo_model import *
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
