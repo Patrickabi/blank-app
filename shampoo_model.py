@@ -72,7 +72,7 @@ def shampoo_model(X_encoded, y):
 def plot_shampoo_feature_importance(rf_model, X_train):
     
     importances = rf_model.feature_importances_
-        
+    
     # Create a DataFrame for the feature importances and their corresponding feature names
     importance_df = pd.DataFrame({
         'feature': X_train.columns,
@@ -109,15 +109,21 @@ def plot_shampoo_feature_importance(rf_model, X_train):
     # Concatenate the new rows with the existing DataFrame
     importance_df = pd.concat([importance_df, top_3_brands, ingredient_row], ignore_index=True)
     
+    # Add the "item_size" feature manually with a fixed importance value
+    item_size_row = pd.DataFrame({'feature': ['item_size'], 'importance': [0.02278]})
+    importance_df = pd.concat([importance_df, item_size_row], ignore_index=True)
+    
     # Filter out features with importance less than 0.03
     importance_df = importance_df[importance_df['importance'] > 0.03]
     
     # Sort the features by importance
     importance_df = importance_df.sort_values(by='importance', ascending=False)
     
-    # Define colors for the top 3 brands
-    top_3_colors = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)']
-    
+    # Define distinct colors for each feature
+    colors = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)', 
+              'rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)', 
+              'rgba(128, 0, 128, 0.6)', 'rgba(255, 165, 0, 0.6)', 'rgba(75, 0, 130, 0.6)']
+
     # Plotly stacked bar chart
     fig = go.Figure()
     
@@ -128,7 +134,7 @@ def plot_shampoo_feature_importance(rf_model, X_train):
             y=['Brand (summed)'],
             orientation='h',
             name=row['feature'],
-            marker_color=top_3_colors[i % len(top_3_colors)]  # Use modulo to avoid index out of range
+            marker_color=colors[i % len(colors)]  # Assign different colors
         ))
     
     # Add bar for 'Other' brands
@@ -143,7 +149,6 @@ def plot_shampoo_feature_importance(rf_model, X_train):
     ))
     
     # Add bars for the top 3 ingredients
-    top_3_colors_ingredient = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']
     for i, (index, row) in enumerate(top_3_ingredients.iterrows()):
         fig.add_trace(go.Bar(
             x=[row['importance']],
@@ -151,7 +156,7 @@ def plot_shampoo_feature_importance(rf_model, X_train):
             orientation='h',
             name=row['feature'],
             textposition='inside',
-            marker_color=top_3_colors_ingredient[i % len(top_3_colors_ingredient)]  # Use modulo to avoid index out of range
+            marker_color=colors[(i + 3) % len(colors)]  # Assign different colors
         ))
     
     # Add the summed "Ingredient (summed)" bar
@@ -166,13 +171,25 @@ def plot_shampoo_feature_importance(rf_model, X_train):
         insidetextanchor='middle'
     ))
     
+    # Add the "item_size" bar
+    fig.add_trace(go.Bar(
+        x=[0.02278],
+        y=['item_size'],
+        orientation='h',
+        name='item_size',
+        marker_color='rgba(255, 105, 180, 0.6)',  # Distinct color for item_size
+        text='item_size',
+        textposition='inside',
+        insidetextanchor='middle'
+    ))
+    
     # Plot the remaining features
     fig.add_trace(go.Bar(
         x=importance_df[~importance_df['feature'].str.contains('Brand|Ingredient')]['importance'],
         y=importance_df[~importance_df['feature'].str.contains('Brand|Ingredient')]['feature'],
         orientation='h',
         name='Other Features',
-        marker_color='rgb(255, 204, 204, 0.1)'  # Gray color for other features
+        marker_color='rgba(128, 128, 128, 0.6)'  # Gray color for other features
     ))
     
     # Update layout for better display
