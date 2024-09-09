@@ -15,8 +15,6 @@ import time
 from st_vizzu import *
 import visgraph
 
-st.set_page_config(layout="wide", page_title="Customer Decision Tree - Amazon")
-
 st.title('Amazon Customer Satisfaction Visualizer')
 
 st.write("""
