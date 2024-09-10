@@ -16,7 +16,7 @@ from st_vizzu import *
 import visgraph
 from shampoo_model import *
 from deodorant_model import get_deodo_data, deodo_model, plot_deodo_feature_importance
-from stream import logo
+
 
 sidebar_logo = "logo.png"
 st.logo(sidebar_logo)
