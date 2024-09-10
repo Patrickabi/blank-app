@@ -1,6 +1,6 @@
 
 
-def plot_water_feature()
+def plot_water_feature():
 
   df = pd.read_csv('data_water_7k.csv')
   df_relevant = df[['Brand', 'Material', 'Color', 'Special Feature', 'Volume', 'rating_cat']]
