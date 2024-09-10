@@ -74,6 +74,7 @@ def create_df():
     y_test = y_test.astype(int)
     X_train = X_train.loc[:, ~X_train.columns.duplicated()]
     X_test = X_test.loc[:, ~X_test.columns.duplicated()]
+    
     return df
 
 df = create_df()
@@ -86,8 +87,11 @@ y = df['rating_cat']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
+
 y_train = y_train.astype(int)
 y_test = y_test.astype(int)
+X_train = X_train.loc[:, ~X_train.columns.duplicated()]
+X_test = X_test.loc[:, ~X_test.columns.duplicated()]
 
 
 def train_rf_model():
