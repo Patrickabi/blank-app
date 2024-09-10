@@ -29,34 +29,17 @@ def get_deodo_data():
                   'bought_together', 'images_y',
                   'user_id', 'helpful_vote', 'verified_purchase']
   
-  # Remover as colunas do DataFrame
-  df = df.drop(columns=cols_to_drop)
-  
-  
-  top_50_brands = brand_counts.head(50)
-  
-  
-  # Calcular a contagem de cada marca
+   df = df.drop(columns=cols_to_drop)
   brand_counts = df['Brand'].value_counts()
   
   # Selecionar as 50 marcas mais frequentes
-  top_50_brands = brand_counts.head(50)
+  top_50_brands = brand_counts[:50]
   
   # Filtrar o DataFrame para manter apenas as linhas com essas marcas
   df_filtered = df[df['Brand'].isin(top_50_brands.index)]
-  
-  
-  
-  top_50_scent = scent_counts.head(50)
-  
-  
-  # Calcular a contagem de cada 'Scent' no DataFrame filtrado
+ 
   scent_counts = df_filtered['Scent'].value_counts()
-  
-  # Selecionar os 50 'Scent' mais frequentes
-  top_50_scent = scent_counts.head(50)
-  
-  # Filtrar o DataFrame para manter apenas as linhas com esses 'Scent'
+  top_50_scent = scent_counts[:50]
   df_filtered_scent = df_filtered[df_filtered['Scent'].isin(top_50_scent.index)]
   
   
