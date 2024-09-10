@@ -78,7 +78,7 @@ if option == "Diapers":
     st.title('Visualizing')
 
     # Plot the feature importance 
-    fig = plot_feature_importance(rf_model, X_train)
+    fig = plot_feature_importance1(rf_model, X_train)
 
     on = st.toggle("Show Graph")
 
