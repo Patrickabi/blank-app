@@ -92,7 +92,7 @@ def deodo_model(X_train, y_train):
   clf.fit(X_train, y_train)
   return clf
 
-def plot_deodo_feature_importance(rf_model, X_train):
+def plot_deodo_feature_importance(clf, X_train):
     
   importances = clf.feature_importances_
   
