@@ -94,48 +94,68 @@ def deodo_model(X_train, y_train):
 
 def plot_deodo_feature_importance(rf_model, X_train):
     
-    importances = rf_model.feature_importances_
-    
-    # Create a DataFrame for the feature importances and their corresponding feature names
-    importance_df = pd.DataFrame({
-        'feature': X_train.columns,
-        'importance': importances
-    })
-    
-    # Filter out features with importance less than 0.02
-    importance_df = importance_df[importance_df['importance'] > 0.02]
-    
-    # Filter the DataFrame to include only "Item_form", "Brand", and "Scent"
-    importance_df = importance_df[importance_df['feature'].isin(['Item_form', 'Brand', 'Scent'])]
-    
-    # Sort the features by importance
-    importance_df = importance_df.sort_values(by='importance', ascending=False)
-    
-    # Define distinct colors for each feature
-    colors = [
-        'rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)'
-    ]
+  importances = clf.feature_importances_
+  
+  # Create a DataFrame for the feature importances and their corresponding feature names
+  importance_df = pd.DataFrame({
+      'feature': X_train.columns,
+      'importance': importances
+  })
+  
+  # Filter out features with importance less than 0.02
+  importance_df = importance_df[importance_df['importance'] > 0.02]
+  
+  # Separate features related to "Brand", "Item form", and "Scent"
+  brand_df = importance_df[importance_df['feature'].str.contains('Brand', case=False, regex=True)]
+  scent_df = importance_df[importance_df['feature'].str.contains('Scent', case=False, regex=True)]
+  item_form_df = importance_df[importance_df['feature'].str.contains('Item form', case=False, regex=True)]
+  
+  # Group by "Brand" and "Scent", summing their importances
+  brand_importance_sum = brand_df['importance'].sum()
+  scent_importance_sum = scent_df['importance'].sum()
+  
+  # Plotly bar chart with stacked bars
+  fig = go.Figure()
+  
+  # Add the "Item form" bar as a standalone bar
+  fig.add_trace(go.Bar(
+      x=[item_form_df['importance'].sum()],
+      y=['Item form'],
+      orientation='h',
+      name='Item form',
+      marker_color='rgba(0, 255, 0, 0.6)'  # Green for Item form
+  ))
+  
+  # Add "Brand" as a stacked bar with its sub-features inside
+  for i, (index, row) in enumerate(brand_df.iterrows()):
+      fig.add_trace(go.Bar(
+          x=[row['importance']],
+          y=['Brand (summed)'],
+          orientation='h',
+          name=row['feature'],
+          marker_color=f'rgba(255, {100 + i * 30}, 0, 0.6)',  # Gradient of orange for each brand feature
+          showlegend=True  # Show legend for individual brands
+      ))
+  
+  # Add "Scent" as a stacked bar with its sub-features inside
+  for i, (index, row) in enumerate(scent_df.iterrows()):
+      fig.add_trace(go.Bar(
+          x=[row['importance']],
+          y=['Scent (summed)'],
+          orientation='h',
+          name=row['feature'],
+          marker_color=f'rgba(0, {100 + i * 30}, 255, 0.6)',  # Gradient of blue for each scent feature
+          showlegend=True  # Show legend for individual scents
+      ))
+  
+  # Update layout for better display
+  fig.update_layout(
+      title="Feature Importances in Random Forest (Summed and Stacked for Brand and Scent)",
+      xaxis_title="Importance",
+      yaxis_title="Feature",
+      barmode='stack',  # Stack bars on top of each other
+      yaxis={'categoryorder': 'total ascending'}
+  )
 
-    # Plotly bar chart
-    fig = go.Figure()
-    
-    # Add bars for each feature
-    for i, (index, row) in enumerate(importance_df.iterrows()):
-        fig.add_trace(go.Bar(
-            x=[row['importance']],
-            y=[row['feature']],
-            orientation='h',
-            name=row['feature'],
-            marker_color=colors[i % len(colors)]  # Assign different colors
-        ))
-    
-    # Update layout for better display
-    fig.update_layout(
-        title="Feature Importances in Random Forest (Filtered for Importance > 0.02)",
-        xaxis_title="Importance",
-        yaxis_title="Feature",
-        barmode='stack',  # Stack bars on top of each other
-        yaxis={'categoryorder': 'total ascending'}
-    )   
 
-    return fig
+  return fig
