@@ -177,6 +177,6 @@ elif option == "Water Bottles":
     if st.button("but why ?"):
         st.write_stream(stream_data_water)     
     on = st.toggle("Show Graph")
-        if on:
+    if on:
         st.plotly_chart(fig)
     
