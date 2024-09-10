@@ -117,6 +117,28 @@ elif option == "Shampoo":
 elif option == "Deodorants":
     time.sleep(0.005)
     st.success("Done!")
+
+    deodo_text = """Our analysis revealed that among the features considered, the brand of the deodorant emerged as the most influential factor in the purchasing decision.
+    This finding was consistent across various segments of the dataset. Consumers demonstrated a strong preference for well-known and trusted brands,
+    indicating that brand recognition and reputation play a critical role in their purchase choices.
+    In comparison, while item form (such as spray, stick, or roll-on) and scent were also important factors, they did not have as significant an impact on consumer decisions as the brand did.
+    Item form and scent preferences varied among consumers but were secondary to brand influence.
+    The research highlights the paramount importance of brand in consumer decision-making for deodorants. While other factors like item form and scent do affect consumer choices,
+    brand loyalty and recognition are the dominant factors driving purchase decisions. This insight can be valuable for companies looking to position their products effectively in the market
+    and for understanding consumer behavior trends in the personal care industry."""
+    
+    st.header("The study", divider=True)
+    st.write("""We analyzed a comprehensive dataset of deodorant products, focusing on several key features: brand,
+    item form, and scent. These features were chosen due to their potential impact on consumer preferences.
+    We utilized various data analysis techniques to determine the significance of each feature in the decision-making process.""")
+
+    def stream_data_deo():
+        for word in deodo_text.split(" "):
+            yield word + " "
+            time.sleep(0.02)
+    if st.button("but why ?"):
+        st.write_stream(stream_data_deo)
+    
     df, x, y = get_deodo_data()
     deodo_model = deodo_model(x, y)
     fig = plot_deodo_feature_importance(deodo_model, x)
