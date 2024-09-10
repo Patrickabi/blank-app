@@ -23,35 +23,6 @@ import plotly.graph_objects as go
 
 def plot_water_feature():
 
-  df = pd.read_csv('data_water_7k.csv')
-  df_relevant = df[['Brand', 'Material', 'Color', 'Special Feature', 'Volume', 'rating_cat']]
-  
-  # Variáveis independentes e dependente
-  X = df_relevant[['Brand', 'Material', 'Color', 'Special Feature', 'Volume']]
-  y = df_relevant['rating_cat']
-  
-  # Inicializar o OneHotEncoder
-  ohe = OneHotEncoder(sparse_output=False, drop='first')
-  
-  # Ajustar e transformar os dados
-  X_encoded = ohe.fit_transform(X[['Brand', 'Material', 'Color', 'Special Feature']].astype(str))
-  
-  # Criar um DataFrame com as características codificadas
-  X_encoded_df = pd.DataFrame(X_encoded, columns=ohe.get_feature_names_out(['Brand', 'Material', 'Color', 'Special Feature']))
-  
-  # Concatenar o DataFrame original (excluindo as colunas categóricas originais) com o novo DataFrame codificado
-  X = pd.concat([X.drop(columns=['Brand', 'Material', 'Color', 'Special Feature']), X_encoded_df], axis=1)
-  
-  # Certificar que 'Volume' está no tipo númerico
-  X['Volume'] = pd.to_numeric(X['Volume'], errors='coerce')
-  
-  # Dividir os dados em conjuntos de treino e teste
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-  
-  # Criar e treinar o modelo de floresta aleatória
-  model = RandomForestClassifier(random_state=42)
-  model.fit(X_train, y_train)
-  
   importances = {
       'Volume': 0.1,
       'Brand_CamelBak': 0.02, 'Material_Polyester, Nylon, Polypropylene': 0.02, 
@@ -72,6 +43,12 @@ def plot_water_feature():
       'Special Feature_Wide Mouth, Leak Proof': 0.01
   }
   
+  # Calculate the total sum of importances
+  total_importance = sum(importances.values())
+  
+  # Scale the data so that the total sums up to 1
+  scaled_importances = {k: v / total_importance for k, v in importances.items()}
+  
   # Helper function to get top 3 and sum "other" features
   def get_top_3_and_other(prefix, data):
       category_features = {k: v for k, v in data.items() if k.startswith(prefix)}
@@ -83,10 +60,10 @@ def plot_water_feature():
       return top_3, other
   
   # Get top 3 and 'Other' for each category
-  top_3_brand, other_brand = get_top_3_and_other('Brand', importances)
-  top_3_material, other_material = get_top_3_and_other('Material', importances)
-  top_3_color, other_color = get_top_3_and_other('Color', importances)
-  top_3_special_feature, other_special_feature = get_top_3_and_other('Special Feature', importances)
+  top_3_brand, other_brand = get_top_3_and_other('Brand', scaled_importances)
+  top_3_material, other_material = get_top_3_and_other('Material', scaled_importances)
+  top_3_color, other_color = get_top_3_and_other('Color', scaled_importances)
+  top_3_special_feature, other_special_feature = get_top_3_and_other('Special Feature', scaled_importances)
   
   # Add 'Other' category to each list
   top_3_brand['Other'] = other_brand
@@ -151,7 +128,7 @@ def plot_water_feature():
   fig.add_trace(go.Bar(
       name='Volume',
       y=['Volume'],
-      x=[importances['Volume']],
+      x=[scaled_importances['Volume']],
       orientation='h',
       marker=dict(color='lightgrey'),
       showlegend=True
@@ -159,8 +136,8 @@ def plot_water_feature():
   
   # Configure the layout
   fig.update_layout(
-      title='Summed Feature Importances by Category (Top 3 Divided + Other)',
-      xaxis_title='Importance',
+      title='Summed Feature Importances by Category (Scaled to Sum 1)',
+      xaxis_title='Importance (Scaled)',
       yaxis_title='Category',
       barmode='stack',
       template='plotly_white',
