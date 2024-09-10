@@ -52,52 +52,58 @@ def plot_water_feature():
   model = RandomForestClassifier(random_state=42)
   model.fit(X_train, y_train)
   
-  # Fazer previsões
-  y_pred = model.predict(X_test)
+  importances = {
+      'Volume': 0.1,
+      'Brand_CamelBak': 0.02, 'Material_Polyester, Nylon, Polypropylene': 0.02, 
+      'Special Feature_Carrying Loop, Straw': 0.02, 'Special Feature_nan': 0.02,
+      'Brand_Contigo': 0.01, 'Brand_EcoVessel': 0.01, 'Brand_Hydro Flask': 0.01, 
+      'Brand_Nalgene': 0.01, 'Brand_SIGG': 0.01, 'Brand_Simple Modern': 0.01, 
+      'Brand_Under Armour': 0.01, 'Material_Aluminum': 0.01, 'Material_Eastman Tritan Copolyester': 0.01, 
+      'Material_Metal': 0.01, 'Material_Other': 0.01, 'Material_Plastic': 0.01, 
+      'Material_Stainless Steel': 0.01, 'Material_Steel': 0.01, 'Material_nan': 0.01, 
+      'Color_Blue': 0.01, 'Color_Brushed Stainless': 0.01, 'Color_Charcoal': 0.01, 
+      'Color_Foliage': 0.01, 'Color_Gray': 0.01, 'Color_Green': 0.01, 
+      'Color_Hatching Dinos': 0.01, 'Color_Iguanas': 0.01, 'Color_Sapphire': 0.01, 
+      'Color_nan': 0.01, 'Special Feature_Bpa Free,Dishwasher Safe': 0.01, 
+      'Special Feature_Bpa Free,Dishwasher Safe,Leak Proof,Narrow Mouth': 0.01, 
+      'Special Feature_Dishwasher Safe, Cold 24 hour, Spillproof': 0.01, 
+      'Special Feature_Dishwasher Safe,Leak Proof,Narrow Mouth': 0.01, 
+      'Special Feature_Durable': 0.01, 'Special Feature_Leak Proof, Insulated': 0.01, 
+      'Special Feature_Wide Mouth, Leak Proof': 0.01
+  }
   
-  feature_importances = model.feature_importances_
-  features = X.columns
+  # Helper function to get top 3 and sum "other" features
+  def get_top_3_and_other(prefix, data):
+      category_features = {k: v for k, v in data.items() if k.startswith(prefix)}
+      sorted_features = sorted(category_features.items(), key=lambda x: x[1], reverse=True)
+      
+      top_3 = dict(sorted_features[:3])
+      other = sum(v for _, v in sorted_features[3:])
+      
+      return top_3, other
   
-  # Função para obter as 3 maiores importâncias de cada categoria
-  def get_top_3_features(category, feature_importances, features):
-      category_features = [i for i, f in enumerate(features) if category in f]
-      sorted_features = sorted(category_features, key=lambda i: feature_importances[i], reverse=True)[:3]
-      return {features[i]: feature_importances[i] for i in sorted_features}
+  # Get top 3 and 'Other' for each category
+  top_3_brand, other_brand = get_top_3_and_other('Brand', importances)
+  top_3_material, other_material = get_top_3_and_other('Material', importances)
+  top_3_color, other_color = get_top_3_and_other('Color', importances)
+  top_3_special_feature, other_special_feature = get_top_3_and_other('Special Feature', importances)
   
-  # Obter as 3 maiores características de cada categoria
-  top_3_brand = get_top_3_features('Brand', feature_importances, features)
-  top_3_material = get_top_3_features('Material', feature_importances, features)
-  top_3_color = get_top_3_features('Color', feature_importances, features)
+  # Add 'Other' category to each list
+  top_3_brand['Other'] = other_brand
+  top_3_material['Other'] = other_material
+  top_3_color['Other'] = other_color
+  top_3_special_feature['Other'] = other_special_feature
   
-  # Somar as importâncias para 'Brand', 'Material', 'Color'
-  sum_brand = sum(top_3_brand.values())
-  sum_material = sum(top_3_material.values())
-  sum_color = sum(top_3_color.values())
+  # Define colors for the plot
+  colors_brand = ['#1f77b4', '#aec7e8', '#c6dbef', '#d9d9d9']
+  colors_material = ['#ff7f0e', '#ffbb78', '#fdd0a2', '#f5f5f5']
+  colors_color = ['#2ca02c', '#98df8a', '#c7e9c0', '#e5e5e5']
+  colors_special_feature = ['#d62728', '#ff9896', '#f7b6d2', '#e0e0e0']
   
-  # Criar um DataFrame para plotagem, ordenado por importância decrescente
-  aggregated_importances = pd.DataFrame({
-      'Category': ['Brand', 'Material', 'Color', 'Volume'],
-      'Importance': [sum_brand, sum_material, sum_color, feature_importances[features.get_loc('Volume')]]
-  }).sort_values(by='Importance', ascending=False)
-  
-  # Listas de valores para plotagem
-  categories = aggregated_importances['Category'].tolist()
-  importance_sums = aggregated_importances['Importance'].tolist()
-  
-  # Listas com as contribuições dos top 3 de cada grupo
-  brand_values = list(top_3_brand.values())
-  material_values = list(top_3_material.values())
-  color_values = list(top_3_color.values())
-  
-  # Cores para cada subcategoria
-  colors_brand = ['#1f77b4', '#aec7e8', '#c6dbef']
-  colors_material = ['#ff7f0e', '#ffbb78', '#fdd0a2']
-  colors_color = ['#2ca02c', '#98df8a', '#c7e9c0']
-  
-  # Criar o gráfico
+  # Create the plotly figure
   fig = go.Figure()
   
-  # Adicionar barras para 'Brand'
+  # Add bars for 'Brand'
   for i, (feature, value) in enumerate(top_3_brand.items()):
       fig.add_trace(go.Bar(
           name=feature,
@@ -108,7 +114,7 @@ def plot_water_feature():
           showlegend=True
       ))
   
-  # Adicionar barras para 'Material'
+  # Add bars for 'Material'
   for i, (feature, value) in enumerate(top_3_material.items()):
       fig.add_trace(go.Bar(
           name=feature,
@@ -119,7 +125,7 @@ def plot_water_feature():
           showlegend=True
       ))
   
-  # Adicionar barras para 'Color'
+  # Add bars for 'Color'
   for i, (feature, value) in enumerate(top_3_color.items()):
       fig.add_trace(go.Bar(
           name=feature,
@@ -130,24 +136,35 @@ def plot_water_feature():
           showlegend=True
       ))
   
-  # Adicionar a barra de 'Volume'
+  # Add bars for 'Special Feature'
+  for i, (feature, value) in enumerate(top_3_special_feature.items()):
+      fig.add_trace(go.Bar(
+          name=feature,
+          y=['Special Feature'],
+          x=[value],
+          orientation='h',
+          marker=dict(color=colors_special_feature[i]),
+          showlegend=True
+      ))
+  
+  # Add 'Volume' bar separately
   fig.add_trace(go.Bar(
       name='Volume',
       y=['Volume'],
-      x=[feature_importances[features.get_loc('Volume')]],
+      x=[importances['Volume']],
       orientation='h',
       marker=dict(color='lightgrey'),
       showlegend=True
   ))
   
-  # Configurar o layout
+  # Configure the layout
   fig.update_layout(
-      title='Importância das Características Agrupadas e Divididas pelos Top 3',
-      xaxis_title='Importância',
-      yaxis_title='Categoria',
+      title='Summed Feature Importances by Category (Top 3 Divided + Other)',
+      xaxis_title='Importance',
+      yaxis_title='Category',
       barmode='stack',
       template='plotly_white',
-      legend_title_text='Top 3 Features'
+      legend_title_text='Top 3 Features + Other'
   )
-  
+
   return fig
