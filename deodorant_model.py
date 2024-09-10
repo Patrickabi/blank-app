@@ -150,7 +150,7 @@ def plot_deodo_feature_importance(clf, X_train):
   
   # Update layout for better display
   fig.update_layout(
-      title="Feature Importances in Random Forest (Summed and Stacked for Brand and Scent)",
+      title="Feature Importances in Deodorant analysis",
       xaxis_title="Importance",
       yaxis_title="Feature",
       barmode='stack',  # Stack bars on top of each other
