@@ -18,7 +18,7 @@ from shampoo_model import *
 from deodorant_model import get_deodo_data, deodo_model, plot_deodo_feature_importance
 
 
-sidebar_logo = "logo2.png"
+sidebar_logo = "logo(1).png"
 st.logo(sidebar_logo)
 
 st.image("logo.png")
