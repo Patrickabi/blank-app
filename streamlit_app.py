@@ -119,4 +119,7 @@ elif option == "Deodorants":
     st.success("Done!")
     df, x, y = get_deodo_data()
     deodo_model = deodo_model(x, y)
-    plot_deodo_feature_importance(deodo_model, x)
+    fig = plot_deodo_feature_importance(deodo_model, x)
+    on = st.toggle("Show Graph")
+    if on:
+        st.plotly_chart(fig)
