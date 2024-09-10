@@ -165,6 +165,8 @@ elif option == "Water Bottles":
     The goal was to identify the key factors influencing purchase decisions based on historical data and product characteristics. Our researchers were able to identify that
     :blue[Volume], :green[Color], :violet[Material] and :red[Brand] play the biggest row when choosing a product""")
 
+    st.image("water.png", caption="Customer decision tree")
+
     water_text = """The analysis revealed that the most important factors for customers when choosing a water bottle were volume, color, material, and brand.
     Among these, volume stood out as the most significant factor, indicating that customers prioritize the bottle’s capacity in their purchasing decisions.
     This insight can help companies better tailor their product offerings to meet customer preferences and improve their marketing strategies."""
