@@ -72,6 +72,8 @@ def create_df():
     
     y_train = y_train.astype(int)
     y_test = y_test.astype(int)
+    X_train = X_train.loc[:, ~X_train.columns.duplicated()]
+    X_test = X_test.loc[:, ~X_test.columns.duplicated()]
     return df
 
 df = create_df()
