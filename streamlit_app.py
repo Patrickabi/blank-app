@@ -120,6 +120,7 @@ elif option == "Deodorants":
     df, x, y = get_deodo_data()
     deodo_model = deodo_model(x, y)
     fig = plot_deodo_feature_importance(deodo_model, x)
+    st.image("deodorant.png", caption="Customer decision tree")
     on = st.toggle("Show Graph")
     if on:
         st.plotly_chart(fig)
