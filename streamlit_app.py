@@ -163,7 +163,7 @@ elif option == "Water Bottles":
     st.header("The study", divider=True)
     st.write("""In this project, we conducted an in-depth analysis of customer decision-making when purchasing water bottles using a Random Forest model.
     The goal was to identify the key factors influencing purchase decisions based on historical data and product characteristics. Our researchers were able to identify that
-    :blue[Volume], :red[Color], :violet[Material] and :red[Brand] play the biggest row when choosing a product""")
+    :blue[Volume], :green[Color], :violet[Material] and :red[Brand] play the biggest row when choosing a product""")
 
     water_text = """The analysis revealed that the most important factors for customers when choosing a water bottle were volume, color, material, and brand.
     Among these, volume stood out as the most significant factor, indicating that customers prioritize the bottle’s capacity in their purchasing decisions.
