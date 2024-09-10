@@ -134,7 +134,7 @@ def get_deodo_data():
   
   return df_final, X_train, y_train
 
-def deodo_model(X_train, y_train)
+def deodo_model(X_train, y_train):
     
   best_params = {'max_depth': 10, 'min_samples_leaf': 10, 'min_samples_split': 4}
   clf = DecisionTreeClassifier(**best_params, random_state=42)
