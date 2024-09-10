@@ -221,7 +221,113 @@ def plot_feature_importance(rf_model, X_train):
 
     return fig
 
+def plot_feature_importance1(rf_model, X_train):
+    
+    importances = rf_model.feature_importances_
+    
+    # Create a DataFrame for the feature importances and their corresponding feature names
+    importance_df = pd.DataFrame({
+        'feature': X_train.columns,
+        'importance': importances
+    })
+    
+    # Helper function to handle top features and summed categories
+    def get_top_features(df, category, n=3):
+        category_features = df[df['feature'].str.contains(category)]
+        top_features = category_features.nlargest(n, 'importance')
+        summed_importance = category_features[~category_features['feature'].isin(top_features['feature'])]['importance'].sum()
+        return top_features, summed_importance
 
+    # Get top features and summed importance for 'Brand'
+    top_3_brands, other_brands_importance = get_top_features(importance_df, 'Brand')
+    # Create the 'Brand (summed)' row with remaining importance
+    brand_row = pd.DataFrame({'feature': ['Brand (summed)'], 'importance': [other_brands_importance]})
+    
+    # Get top features and summed importance for 'Material'
+    top_3_material, material_importance_sum = get_top_features(importance_df, 'Material')
+    # Create the 'Material (summed)' row with the summed importance
+    material_row = pd.DataFrame({'feature': ['Material (summed)'], 'importance': [material_importance_sum]})
+    
+    # Combine top features and summed rows
+    combined_df = pd.concat([
+        top_3_brands, brand_row, 
+        top_3_material, material_row,
+        importance_df[~importance_df['feature'].str.contains('Brand|Material')]
+    ], ignore_index=True)
+    
+    # Sort the features by importance
+    combined_df = combined_df.sort_values(by='importance', ascending=False)
+    
+    # Define colors for the top 3 features
+    top_3_colors_brand = ['rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)']
+    top_3_colors_material = ['rgba(0, 0, 139, 0.6)', 'rgba(255, 140, 0, 0.6)', 'rgba(0, 100, 0, 0.6)']
+    
+    # Initialize the plotly figure
+    fig = go.Figure()
+    
+    # Add bars for the top 3 brands
+    for i, (index, row) in enumerate(top_3_brands[top_3_brands['feature'] != 'Brand (summed)'].iterrows()):
+        fig.add_trace(go.Bar(
+            x=[row['importance']],
+            y=['Brand (summed)'],
+            orientation='h',
+            name=row['feature'],
+            marker_color=top_3_colors_brand[i % len(top_3_colors_brand)]  # Use modulo to avoid index out of range
+        ))
+    
+    # Add bar for 'Other' brands
+    fig.add_trace(go.Bar(
+        x=[other_brands_importance],
+        y=['Brand (summed)'],
+        orientation='h',
+        name='Other',
+        marker_color='rgba(0, 0, 0, 0.8)',  # Gray color for 'Other'
+        text='Other Brands',
+        textposition='inside'
+    ))
+    
+    # Add bars for the top 3 materials
+    for i, (index, row) in enumerate(top_3_material.iterrows()):
+        fig.add_trace(go.Bar(
+            x=[row['importance']],
+            y=['Material (summed)'],
+            orientation='h',
+            name=row['feature'],
+            textposition='inside',
+            marker_color=top_3_colors_material[i % len(top_3_colors_material)]  # Use modulo to avoid index out of range
+        ))
+    
+    # Add the summed "Material (summed)" bar
+    fig.add_trace(go.Bar(
+        x=[material_importance_sum],
+        y=['Material (summed)'],
+        orientation='h',
+        name='Material',
+        marker_color='rgba(0, 0, 0, 0.8)',  # Primary color for Material summed
+        text='Other Materials',
+        textposition='inside',
+        insidetextanchor='middle'
+    ))
+    
+    # Plot the remaining features
+    fig.add_trace(go.Bar(
+        x=combined_df[~combined_df['feature'].str.contains('Brand|Material')]['importance'],
+        y=combined_df[~combined_df['feature'].str.contains('Brand|Material')]['feature'],
+        orientation='h',
+        name='Other Features',
+        marker_color='rgb(255, 204, 204, 0.1)'  # Gray color for other features
+    ))
+    
+    # Update layout for better display
+    fig.update_layout(
+        title="Feature Importances in Diaper Analysis",
+        xaxis_title="Importance",
+        yaxis_title="Feature",
+        barmode='stack',  # Stack bars on top of each other
+        yaxis={'categoryorder': 'total ascending'}
+    )   
+
+    return fig
 
 
 
