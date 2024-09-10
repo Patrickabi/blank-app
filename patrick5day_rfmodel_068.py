@@ -212,7 +212,7 @@ def plot_feature_importance(rf_model, X_train):
     
     # Update layout for better display
     fig.update_layout(
-        title="Feature Importances in Random Forest (Including Summed Categories)",
+        title="Feature Importances in Diaper analysis",
         xaxis_title="Importance",
         yaxis_title="Feature",
         barmode='stack',  # Stack bars on top of each other
