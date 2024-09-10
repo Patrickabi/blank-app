@@ -15,6 +15,7 @@ import time
 from st_vizzu import *
 import visgraph
 from shampoo_model import *
+from deodorant_model import *
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
@@ -116,3 +117,6 @@ elif option == "Shampoo":
 elif option == "Deodorants":
     time.sleep(0.005)
     st.success("Done!")
+    df, x, y = get_deodo_data()
+    deodo_model = deodo_model(x, y)
+    plot_deodo_feature_importance(deodo_model, x)
