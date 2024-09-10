@@ -12,7 +12,5 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 import plotly.express as px
 import plotly.graph_objects as go
-from streamlit_extras.app_logo import add_logo
 
-def logo():
-    add_logo("logo.png", height=300)
+
