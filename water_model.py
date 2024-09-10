@@ -7,6 +7,19 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import accuracy_score, f1_score
 from scipy.stats import randint
 import plotly.graph_objects as go
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
+from scipy.stats import uniform, randint
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+import plotly.express as px
+import plotly.graph_objects as go
 
 def plot_water_feature():
 
