@@ -55,10 +55,6 @@ def plot_water_feature():
   # Fazer previsões
   y_pred = model.predict(X_test)
   
-  # Relatório de classificação
-  print(classification_report(y_test, y_pred))
-  
-  # Importância das características
   feature_importances = model.feature_importances_
   features = X.columns
   
