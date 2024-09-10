@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.tree import plot_tree
+import plotly.express as px
+import plotly.graph_objects as go
 
 def get_deodo_data():
   df = pd.read_csv('deodorants_final.csv')
