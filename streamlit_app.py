@@ -128,8 +128,8 @@ elif option == "Deodorants":
     and for understanding consumer behavior trends in the personal care industry."""
     
     st.header("The study", divider=True)
-    st.write("""We analyzed a comprehensive dataset of deodorant products, focusing on several key features: brand,
-    item form, and scent. These features were chosen due to their potential impact on consumer preferences.
+    st.write("""We analyzed a comprehensive dataset of deodorant products, focusing on several key features: :red[brand],
+    :blue[item form], and :green[scent]. These features were chosen due to their potential impact on consumer preferences.
     We utilized various data analysis techniques to determine the significance of each feature in the decision-making process.""")
 
     st.image("deodorant.png", caption="Customer decision tree")
