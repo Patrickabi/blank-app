@@ -18,13 +18,10 @@ from shampoo_model import *
 from deodorant_model import get_deodo_data, deodo_model, plot_deodo_feature_importance
 from stream import logo
 
-logo()
+sidebar_logo = "logo.png"
+st.logo(sidebar_logo)
 
-st.logo(
-    LOGO_URL_LARGE,
-    link="https://files.slack.com/files-pri/T02NE0241-F07ME8YB17A/image.png",
-    icon_image=LOGO_URL_SMALL,
-)
+
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
