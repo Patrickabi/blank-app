@@ -19,32 +19,21 @@ def get_deodo_data():
           return '0'
       else:
           return '1'
-  
-  # Aplicar a função à coluna alvo
   df['rating_cat'] = df['rating'].apply(converter_categoria)
-  
   df.drop(columns=['rating_number'], inplace=True)
-  
-  # Lista das colunas a serem removidas
   cols_to_drop = ['main_category', 'average_rating',
                   'price', 'images_x', 'videos', 'store',
                   'bought_together', 'images_y',
                   'user_id', 'helpful_vote', 'verified_purchase']
   
-   df = df.drop(columns=cols_to_drop)
+  df = df.drop(columns=cols_to_drop)
   brand_counts = df['Brand'].value_counts()
-  
-  # Selecionar as 50 marcas mais frequentes
   top_50_brands = brand_counts[:50]
-  
-  # Filtrar o DataFrame para manter apenas as linhas com essas marcas
   df_filtered = df[df['Brand'].isin(top_50_brands.index)]
- 
   scent_counts = df_filtered['Scent'].value_counts()
   top_50_scent = scent_counts[:50]
   df_filtered_scent = df_filtered[df_filtered['Scent'].isin(top_50_scent.index)]
-  
-  
+
   def standardize_item_form(item_form):
       if pd.isna(item_form):
           return 'Unknown'
@@ -69,52 +58,30 @@ def get_deodo_data():
           return 'Wipe'
       else:
           return 'Other'
-  
-  # Aplicar a função de padronização ao DataFrame
   df_filtered_scent['Item Form'] = df_filtered_scent['Item Form'].apply(standardize_item_form)
-  
-  # Contar as ocorrências de cada 'Item Form'
   item_form_counts = df_filtered_scent['Item Form'].value_counts()
-  
-  # Manter apenas as categorias com pelo menos 20 ocorrências
   top_item_forms = item_form_counts[item_form_counts >= 20].index
   df_filtered_scent = df_filtered_scent[df_filtered_scent['Item Form'].isin(top_item_forms)]
-  
-  
-  
   Item_Form_counts = df_filtered_scent['Item Form'].value_counts()
   Item_Form_counts.head(50)
-  
   df_final = df_filtered_scent
-  
   df_encoded = df_final.copy()
-  
-  # Inicializar o LabelEncoder
   encoder = OneHotEncoder(sparse_output=False, drop='first')  # drop='first' remove uma categoria para evitar multicolinearidade
-  
-  # Aplicar o OneHotEncoder nas colunas categóricas
   encoded_columns = encoder.fit_transform(df[['Item Form', 'Brand', 'Scent']])
-  
-  # Obter os nomes das novas colunas após a codificação
   encoded_column_names = encoder.get_feature_names_out(['Item Form', 'Brand', 'Scent'])
-  
-  # Criar um DataFrame com as colunas codificadas
+
   df_encoded = pd.DataFrame(encoded_columns, columns=encoded_column_names)
-  
-  # Concatenar com o DataFrame original (removendo as colunas originais categóricas, se necessário)
+
   df_final = pd.concat([df.drop(columns=['Item Form', 'Brand', 'Scent']), df_encoded], axis=1)
-  
-  # Exibir o DataFrame codificado
+
   df_final.columns[:50]
   X = df_final.drop(['title_x','features','description', 'categories', 'details',
        'parent_asin', 'rating', 'title_y', 'text', 'asin','timestamp', 'rating_cat'], axis=1)
-
   y = df_final['rating_cat']
   
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
   best_params = {'max_depth': 10, 'min_samples_leaf': 10, 'min_samples_split': 4}
 
-  
   return df_final, X_train, y_train
 
 def deodo_model(X_train, y_train):
