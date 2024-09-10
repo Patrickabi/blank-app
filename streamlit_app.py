@@ -16,6 +16,7 @@ from st_vizzu import *
 import visgraph
 from shampoo_model import *
 from deodorant_model import get_deodo_data, deodo_model, plot_deodo_feature_importance
+from water_model import *
 
 
 sidebar_logo = "logo (1).png"
@@ -154,3 +155,28 @@ elif option == "Deodorants":
     on = st.toggle("Show Graph")
     if on:
         st.plotly_chart(fig)
+
+elif option == "Water Bottles":
+    time.sleep(0.005)
+    st.success("Done!")
+
+    st.header("The study", divider=True)
+    st.write("""In this project, we conducted an in-depth analysis of customer decision-making when purchasing water bottles using a Random Forest model.
+    The goal was to identify the key factors influencing purchase decisions based on historical data and product characteristics. Our researchers were able to identify that
+    :blue[Volume], :red[Color], :violet[Material] and :red[Brand] play the biggest row when choosing a product""")
+
+    water_text = """The analysis revealed that the most important factors for customers when choosing a water bottle were volume, color, material, and brand.
+    Among these, volume stood out as the most significant factor, indicating that customers prioritize the bottle’s capacity in their purchasing decisions.
+    This insight can help companies better tailor their product offerings to meet customer preferences and improve their marketing strategies."""
+
+    fig = plot_water_feature()
+    def stream_data_water():
+        for word in water_text.split(" "):
+            yield word + " "
+            time.sleep(0.02)
+    if st.button("but why ?"):
+        st.write_stream(stream_data_water)     
+    on = st.toggle("Show Graph")
+        if on:
+        st.plotly_chart(fig)
+    
