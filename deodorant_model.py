@@ -141,3 +141,51 @@ def deodo_model(X_train, y_train)
   # Treinando o modelo com os melhores parâmetros
   clf.fit(X_train, y_train)
   return clf
+
+def plot_deodo_feature_importance(rf_model, X_train):
+    
+    importances = rf_model.feature_importances_
+    
+    # Create a DataFrame for the feature importances and their corresponding feature names
+    importance_df = pd.DataFrame({
+        'feature': X_train.columns,
+        'importance': importances
+    })
+    
+    # Filter out features with importance less than 0.02
+    importance_df = importance_df[importance_df['importance'] > 0.02]
+    
+    # Filter the DataFrame to include only "Item_form", "Brand", and "Scent"
+    importance_df = importance_df[importance_df['feature'].isin(['Item_form', 'Brand', 'Scent'])]
+    
+    # Sort the features by importance
+    importance_df = importance_df.sort_values(by='importance', ascending=False)
+    
+    # Define distinct colors for each feature
+    colors = [
+        'rgba(255, 0, 0, 0.6)', 'rgba(0, 255, 0, 0.6)', 'rgba(0, 255, 255, 0.6)'
+    ]
+
+    # Plotly bar chart
+    fig = go.Figure()
+    
+    # Add bars for each feature
+    for i, (index, row) in enumerate(importance_df.iterrows()):
+        fig.add_trace(go.Bar(
+            x=[row['importance']],
+            y=[row['feature']],
+            orientation='h',
+            name=row['feature'],
+            marker_color=colors[i % len(colors)]  # Assign different colors
+        ))
+    
+    # Update layout for better display
+    fig.update_layout(
+        title="Feature Importances in Random Forest (Filtered for Importance > 0.02)",
+        xaxis_title="Importance",
+        yaxis_title="Feature",
+        barmode='stack',  # Stack bars on top of each other
+        yaxis={'categoryorder': 'total ascending'}
+    )   
+
+    return fig
