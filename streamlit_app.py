@@ -117,7 +117,7 @@ elif option == "Shampoo":
 elif option == "Deodorants":
     time.sleep(0.005)
     st.success("Done!")
-
+    
     deodo_text = """Our analysis revealed that among the features considered, the brand of the deodorant emerged as the most influential factor in the purchasing decision.
     This finding was consistent across various segments of the dataset. Consumers demonstrated a strong preference for well-known and trusted brands,
     indicating that brand recognition and reputation play a critical role in their purchase choices.
@@ -132,6 +132,8 @@ elif option == "Deodorants":
     item form, and scent. These features were chosen due to their potential impact on consumer preferences.
     We utilized various data analysis techniques to determine the significance of each feature in the decision-making process.""")
 
+    st.image("deodorant.png", caption="Customer decision tree")
+
     def stream_data_deo():
         for word in deodo_text.split(" "):
             yield word + " "
@@ -142,7 +144,7 @@ elif option == "Deodorants":
     df, x, y = get_deodo_data()
     deodo_model = deodo_model(x, y)
     fig = plot_deodo_feature_importance(deodo_model, x)
-    st.image("deodorant.png", caption="Customer decision tree")
+    
     on = st.toggle("Show Graph")
     if on:
         st.plotly_chart(fig)
