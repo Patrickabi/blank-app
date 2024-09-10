@@ -21,7 +21,7 @@ from deodorant_model import get_deodo_data, deodo_model, plot_deodo_feature_impo
 sidebar_logo = "logo.png"
 st.logo(sidebar_logo)
 
-
+st.image("logo.png")
 
 st.title('Amazon Customer Satisfaction Visualizer')
 
